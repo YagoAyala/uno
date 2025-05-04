@@ -1,10 +1,25 @@
 const repository = require('./todo.repository');
 
+/**
+ * List todos.
+ *
+ * @async
+ * @param {{id?: number, name?: string}} [filter] - Filter options.
+ * @returns {Promise<Object[]>}
+ */
 const listItems = async (filter) => {
   const list = await repository.findAll(filter);
   return list;
 };
 
+/**
+ * Create a new todo.
+ *
+ * @async
+ * @param {{name: string}} values - Todo values.
+ * @throws {Error} If name is empty or duplicate.
+ * @returns {Promise<void>}
+ */
 const createItem = async ({ name }) => {
   if (!name?.trim()) {
     throw new Error('Name cannot be empty');
@@ -19,6 +34,14 @@ const createItem = async ({ name }) => {
   await repository.insert(name.trim());
 };
 
+/**
+ * Rename/update a todo.
+ *
+ * @async
+ * @param {{id: number, name?: string}} todo - Todo update.
+ * @throws {Error} If validation fails or item not found.
+ * @returns {Promise<boolean>} True if update succeeded.
+ */
 const renameItem = async (todo) => {
   const todoId = todo.id;
   delete todo.id;
@@ -36,6 +59,14 @@ const renameItem = async (todo) => {
   return true;
 };
 
+/**
+ * Remove a todo by ID.
+ *
+ * @async
+ * @param {number} id - Todo ID.
+ * @throws {Error} If item not found.
+ * @returns {Promise<boolean>} True if removal succeeded.
+ */
 const removeItem = async (id) => {
   const removed = await repository.deleteById(id);
 
