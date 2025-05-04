@@ -74,7 +74,7 @@ DB_PASS=todo
 PORT=4000          # opcional (padrão 4000)
 ```
 
-> O backend cria e sincroniza as tabelas sozinho se o banco estiver acessível. ([GitHub][1])
+> O backend cria e sincroniza as tabelas sozinho se o banco estiver acessível.
 
 ---
 
@@ -113,7 +113,7 @@ docker-compose down    # encerra o container
 
 * **Adicionar & listar tarefas** (já implementado).
 * **Editar, remover, filtrar, validar duplicados / vazio** – requisitos a serem desenvolvidos nos módulos `todo`.
-  A lógica de negócio vive no **service** e a persistência no **repository** usando Sequelize. ([GitHub][2])
+  A lógica de negócio vive no **service** e a persistência no **repository** usando Sequelize.
 
 ---
 
