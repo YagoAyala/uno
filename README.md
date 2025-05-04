@@ -17,23 +17,40 @@ A aplicação inclui:
 
 ```text
 uno/
-├─ .github/            # Workflows de CI
-├─ .vscode/            # Configs de debug/format
-├─ docker-compose.yml  # ▶︎ só o banco
-├─ frontend/           # React 18 (CRA)
+├─ .github/                       # Workflows de CI
+│  └─ workflows/
+├─ .vscode/                       # Configs de debug/format
+├─ frontend/                      # React 18 (CRA)
 │  ├─ public/
 │  └─ src/
-│      ├─ components/      # Dialogs, listas, etc.
-│      ├─ context/         # Toasts + tema claro/escuro
-│      ├─ graphql/         # Queries & mutations
-│      └─ App.js
-└─ serverless/         # API GraphQL (Node 18)
-   └─ src/
-       ├─ modules/
-       │   └─ todo/            # *.type.graphql · resolver · service · model
-       ├─ db.js                # Conexão Sequelize/Postgres :contentReference[oaicite:2]{index=2}
-       ├─ schema.js            # Merge dinâmico de schema/resolvers :contentReference[oaicite:3]{index=3}
-       └─ server.js            # Bootstrap Apollo Server :contentReference[oaicite:4]{index=4}
+│      ├─ api/
+│      │   └─ graphql/            # Apollo client + documents
+│      │       ├─ client.js
+│      │       └─ queries.js
+│      ├─ features/               # “Domain-driven” slices
+│      │   ├─ lanes/
+│      │   └─ todos/
+│      ├─ pages/
+│      │   └─ BoardPage.jsx
+│      ├─ ui/
+│      │   └─ Card.jsx            # Átomos genéricos
+│      ├─ ToastProvider.jsx       # Contexto de toasts
+│      ├─ App.jsx
+│      └─ index.jsx
+└─ serverless/                    # API GraphQL (Node 18)
+    ├─ docker-compose.yml         # Banco de dados local
+    ├─ src/
+    │   ├─ db/
+    │   │   ├─ config.js          # Config Sequelize
+    │   │   ├─ migrations/
+    │   │   └─ seeders/
+    │   ├─ modules/
+    │   ├─ db.js                  # Conexão Sequelize/Postgres
+    │   ├─ schema.js              # Merge dinâmico de 
+    │   └─ server.js              # Lambda/Express handler
+    └─ tests/
+        ├─ integration/
+        └─ unit/
 ````
 
 ---
@@ -108,17 +125,5 @@ docker-compose down    # encerra o container
 | serverless | `npm test`   | Jest + cobertura         |
 | frontend   | `yarn start` | CRA com HMR              |
 | frontend   | `yarn test`  | React Testing Library    |
-
----
-
-## Próximos passos sugeridos
-
-| Ideia                              | Benefício                     |
-| ---------------------------------- | ----------------------------- |
-| Migrations com `sequelize-cli`     | Versão controlada do schema   |
-| Autenticação JWT                   | Multiusuário & segurança      |
-| Docker Compose completo (app + db) | On-boarding em 1 comando      |
-| E2E (Playwright/Cypress)           | Cobertura do fluxo do usuário |
-| Observabilidade (Winston/Sentry)   | Logs & rastreamento de erros  |
 
 ---
