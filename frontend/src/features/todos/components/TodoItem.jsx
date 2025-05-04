@@ -21,7 +21,13 @@ const TodoItem = ({ todo, index, done }) => {
             {...prov.draggableProps}
             {...prov.dragHandleProps}
             disablePadding
-            sx={{ mb: 1, borderRadius: 1, background: '#fff', opacity: done ? 0.6 : 1 }}
+            sx={{
+              mb: 1,
+              borderRadius: 1,
+              background: 'var(--todo-background)',
+              opacity: done ? 0.6 : 1,
+              transition: 'background 0.3s ease',
+            }}
           >
             <ListItemButton dense>
               <ListItemText

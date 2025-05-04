@@ -16,12 +16,13 @@ const Wrapper = styled.div`
 
 const Card = styled.div`
   width: 900px;
-  background: #dcdcdc;
+  background: var(--card-background);
   padding: 24px 32px;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  transition: background 0.3s ease;
 `;
 
 const Row = styled.div`

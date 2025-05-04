@@ -3,12 +3,13 @@ import { Droppable } from '@hello-pangea/dnd';
 
 const Column = styled.div`
   width: 280px;
-  background: #f4f5f7;
+  background: var(--lane-background);
   border-radius: 6px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition: background 0.3s ease;
 `;
 
 const LaneHeader = styled.h3`

@@ -11,11 +11,12 @@ const Row = styled.div`
 `;
 
 const ScrollBox = styled.div`
-  background: #efefef;
+  background: var(--scroll-background);
   padding: 12px;
   border-radius: 5px;
   max-height: 400px;
   overflow-y: auto;
+  transition: background 0.3s ease;
 `;
 
 const Lanes = () => {
