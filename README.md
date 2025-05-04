@@ -6,8 +6,8 @@ A aplicação inclui:
 
 | Camada | Tecnologias principais |
 | ------ | ---------------------- |
-| **Frontend** | React 18 (Create-React-App), Material UI v5, Apollo Client 3, react-toastify, styled-components :contentReference[oaicite:0]{index=0} |
-| **Backend** | Node 18, Apollo Server 4, GraphQL-Tools, Sequelize 6 (PostgreSQL), dotenv :contentReference[oaicite:1]{index=1} |
+| **Frontend** | React 18 (Create-React-App), Material UI v5, Apollo Client 3, react-toastify, styled-components |
+| **Backend** | Node 18, Apollo Server 4, GraphQL-Tools, Sequelize 6 (PostgreSQL), dotenv |
 | **Teste**   | Jest 29 + Supertest |
 | **Infra**   | `docker-compose` (container único para **PostgreSQL**) |
 
