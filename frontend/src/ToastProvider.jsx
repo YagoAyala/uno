@@ -1,4 +1,4 @@
-import { ToastContainer } from 'react-toastify/dist/index.js';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ToastProvider = () => (

@@ -5,7 +5,7 @@ import { useAddTodo } from '../hooks';
 import { Lanes } from '../../lanes';
 import { getOperationName } from '@apollo/client/utilities';
 import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
-import { toast } from 'react-toastify/dist/index.js';
+import { toast } from 'react-toastify';
 import { useLanesWithTodos } from '../../lanes/hooks';
 
 const Wrapper = styled.div`

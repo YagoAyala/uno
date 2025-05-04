@@ -8,7 +8,7 @@ import {
   Button,
 } from '@mui/material';
 import { useUpdateTodo } from '../hooks';
-import { toast } from 'react-toastify/dist/index.js';
+import { toast } from 'react-toastify';
 import { getOperationName } from '@apollo/client/utilities';
 import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
 

@@ -2,7 +2,7 @@ import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 import { useDeleteTodo } from '../hooks';
 import { getOperationName } from '@apollo/client/utilities';
 import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
-import { toast } from 'react-toastify/dist/index.js';
+import { toast } from 'react-toastify';
 
 const DeleteTodoModal = ({ open, onClose, todo }) => {
   const [deleteTodo] = useDeleteTodo();
