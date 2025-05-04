@@ -1,5 +1,4 @@
 
-````markdown
 # UNO Challenge · Lista de Tarefas 🗒️
 
 Repositório-base do desafio técnico da **UNO**.  
@@ -123,6 +122,3 @@ docker-compose down    # encerra o container
 | Observabilidade (Winston/Sentry)   | Logs & rastreamento de erros  |
 
 ---
-
-```
-```
