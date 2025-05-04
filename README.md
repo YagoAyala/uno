@@ -73,9 +73,6 @@ DB_USER=todo
 DB_PASS=todo
 PORT=4000          # opcional (padrão 4000)
 ```
-
-> O backend cria e sincroniza as tabelas sozinho se o banco estiver acessível.
-
 ---
 
 ## Executando localmente
@@ -105,6 +102,18 @@ yarn start           # http://localhost:3000
 docker-compose up -d   # inicia o serviço 'db'
 # ... rode backend e frontend normalmente em terminais separados ...
 docker-compose down    # encerra o container
+```
+
+---
+
+## Rodando migrations e seeders (Sequelize CLI)
+
+```bash
+cd serverless
+
+npx sequelize-cli db:migrate     # cria as tabelas
+
+npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 ```
 
 ---
