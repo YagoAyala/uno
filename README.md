@@ -140,4 +140,36 @@ npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 | frontend   | `yarn start` | CRA com HMR              |
 | frontend   | `yarn test`  | React Testing Library    |
 
+Thought for 8 seconds
+
+
+## Próximos passos
+
+* **Converter para PWA**
+* **Perfil administrador**
+
+  * Autenticação (JWT): `admin` pode alterar o campo **position** das lanes direto no board.
+  * Telas de gestão em `/admin/lanes` com drag & drop e validação de limites.
+
+* **Sincronização em tempo real**
+
+  * Implementar **WebSockets / GraphQL Subscriptions** para que várias sessões compartilhem o mesmo board sem conflitos.
+  * Estratégia de merge otimista + broadcasts: quando um usuário move um card, todos os clientes recebem o evento e atualizam a UI imediatamente.
+  * Em caso de colisão, aplicar *last-write-wins* ou fila de operações com versão do documento.
+
+* **Deploy em nuvem**
+
+  * **Backend**: empacotar o serviço GraphQL em Lambda + API Gateway (WebSocket API para subs) via AWS SAM ou Serverless Framework.
+  * **Frontend**: hospedar no S3 + CloudFront (ou Amplify). Integração contínua com GitHub Actions.
+
+* **Banco de dados gerenciado**
+
+  * Migrar o Postgres local para AWS RDS (Free Tier ou Aurora Serverless v2) e apontar `DB_HOST`, `DB_USER`, `DB_PASS` nos Lambdas.
+
+* **Testes E2E com Cypress**
+
+  * Criar suíte de smoke-tests (criar tarefa, mover card, concluir tarefa).
+  * Executar na pipeline CI e gerar relatórios com screenshots para falhas.
+
+
 ---
