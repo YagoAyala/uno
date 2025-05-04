@@ -140,8 +140,7 @@ npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 | frontend   | `yarn start` | CRA com HMR              |
 | frontend   | `yarn test`  | React Testing Library    |
 
-Thought for 8 seconds
-
+---
 
 ## Próximos passos
 
