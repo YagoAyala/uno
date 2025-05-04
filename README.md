@@ -98,7 +98,8 @@ yarn start           # http://localhost:3000
 ## Executando com Docker Compose (somente Postgres)
 
 ```bash
-# na raiz do projeto
+cd serverless
+
 docker-compose up -d   # inicia o serviço 'db'
 # ... rode backend e frontend normalmente em terminais separados ...
 docker-compose down    # encerra o container
@@ -120,9 +121,12 @@ npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 
 ## Funcionalidades atuais
 
-* **Adicionar & listar tarefas** (já implementado).
-* **Editar, remover, filtrar, validar duplicados / vazio** – requisitos a serem desenvolvidos nos módulos `todo`.
-  A lógica de negócio vive no **service** e a persistência no **repository** usando Sequelize.
+* **Criar e listar tarefas** – inclusão de novos cards e exibição em tempo real.
+* **CRUD** – edição, exclusão, filtros e validações (duplicidade ou campos vazios). A regra de negócio reside no **service**; a persistência, no **repository** via Sequelize.
+* **Notificações** – feedback imediato ao usuário com Toastify.
+* **Ordenação de lanes** – é possível reordenar colunas e gravar a nova sequência no Postgres através do campo **position**.
+* **Conclusão de tarefas** – um card é marcado como concluído automaticamente ao entrar em uma lane cujo atributo **is\_done** seja `true`.
+* **Dark Mode** – Alternância de tema claro e escuro.
 
 ---
 
