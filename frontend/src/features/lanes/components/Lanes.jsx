@@ -8,6 +8,9 @@ import { useLanesWithTodos } from '../hooks';
 const Row = styled.div`
   display: flex;
   gap: 24px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 8px;
 `;
 
 const ScrollBox = styled.div`
@@ -26,7 +29,6 @@ const Lanes = () => {
   if (loading) {
     return null;
   }
-
   const lanes = data?.lanesWithItem ?? [];
   const todos = lanes.flatMap((lane) => lane.todos);
 
@@ -35,7 +37,6 @@ const Lanes = () => {
     if (!destination) {
       return;
     }
-
     const destLaneId = parseInt(destination.droppableId, 10);
     const todoId = parseInt(draggableId, 10);
 
@@ -51,25 +52,24 @@ const Lanes = () => {
     await refetch();
   };
 
-  const columns = lanes.map((lane) => {
-    const body = (
-      <ScrollBox>
-        {lane.todos.map((todo, idx) => (
-          <TodoItem key={todo.id} todo={todo} index={idx} done={lane.is_done} />
-        ))}
-      </ScrollBox>
-    );
-
-    return (
-      <LaneColumn key={lane.id} lane={lane}>
-        {body}
-      </LaneColumn>
-    );
-  });
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Row>{columns}</Row>
+      <Row>
+        {lanes.map((lane) => (
+          <LaneColumn key={lane.id} lane={lane}>
+            <ScrollBox>
+              {lane.todos.map((todo, idx) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  done={lane.is_done}
+                />
+              ))}
+            </ScrollBox>
+          </LaneColumn>
+        ))}
+      </Row>
     </DragDropContext>
   );
 };
