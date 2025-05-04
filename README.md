@@ -122,6 +122,7 @@ npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 ## Funcionalidades atuais
 
 * **Criar e listar tarefas** – inclusão de novos cards e exibição em tempo real.
+* **Drag & drop de cards** – reorganize tarefas entre lanes usando `@hello-pangea/dnd`; a nova ordem é persistida no banco.
 * **CRUD** – edição, exclusão, filtros e validações (duplicidade ou campos vazios). A regra de negócio reside no **service**; a persistência, no **repository** via Sequelize.
 * **Notificações** – feedback imediato ao usuário com Toastify.
 * **Ordenação de lanes** – é possível reordenar colunas e gravar a nova sequência no Postgres através do campo **position**.
