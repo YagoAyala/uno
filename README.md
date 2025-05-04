@@ -2,7 +2,7 @@
 # UNO Challenge · Lista de Tarefas 🗒️
 
 Repositório-base do desafio técnico da **UNO**.  
-A aplicação inclui:
+**A aplicação inclui:**
 
 | Camada | Tecnologias principais |
 | ------ | ---------------------- |
