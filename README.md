@@ -136,7 +136,6 @@ npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
 | serverless | `npm start`  | Apollo Server (prod/dev) |
 | serverless | `npm test`   | Jest + cobertura         |
 | frontend   | `yarn start` | CRA com HMR              |
-| frontend   | `yarn test`  | React Testing Library    |
 
 ---
 
