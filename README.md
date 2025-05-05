@@ -77,25 +77,7 @@ PORT=4000          # opcional (padrão 4000)
 
 ## Executando localmente
 
-### 1. Backend (npm)
-
-```bash
-cd serverless
-npm install
-npm start            # http://localhost:4000/graphql
-```
-
-### 2. Frontend (Yarn)
-
-```bash
-cd ../frontend
-yarn
-yarn start           # http://localhost:3000
-```
-
----
-
-## Executando com Docker Compose (somente Postgres)
+### 1. Executando com Docker Compose (somente Postgres)
 
 ```bash
 cd serverless
@@ -107,7 +89,23 @@ docker-compose down    # encerra o container
 
 ---
 
-## Rodando migrations e seeders (Sequelize CLI)
+### 2. Backend (npm)
+
+```bash
+cd serverless
+npm install
+npm start            # http://localhost:4000/graphql
+```
+
+### 3. Frontend (Yarn)
+
+```bash
+cd frontend
+yarn
+yarn start           # http://localhost:3000
+```
+
+### 4. Rodando migrations e seeders (Sequelize CLI)
 
 ```bash
 cd serverless
