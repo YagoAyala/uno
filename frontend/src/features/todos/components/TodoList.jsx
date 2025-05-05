@@ -1,113 +1,21 @@
 import { useState } from 'react';
-import { TextField, Button } from '@mui/material';
-import styled from 'styled-components';
-import { useAddTodo } from '../hooks';
-import { Lanes } from '../../lanes';
-import { getOperationName } from '@apollo/client/utilities';
-import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
+import { Card, CardContent, Box, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
-import { useLanesWithTodos } from '../../lanes/hooks';
+import { getOperationName } from '@apollo/client/utilities';
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Card = styled.div`
-  width: 900px;
-  background: var(--card-background);
-  padding: 24px 32px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  transition: background 0.3s ease;
-`;
-
-const Row = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const Toolbar = ({ onApply, isFiltered }) => {
-  const [text, setText] = useState('');
-
-  const toggle = () => {
-    const value = isFiltered ? '' : text.trim();
-
-    if (!isFiltered && !value) {
-      return;
-    }
-
-    onApply(value);
-
-    if (isFiltered) {
-      setText('');
-    }
-  };
-
-  return (
-    <Row>
-      <TextField
-        label="Filter"
-        variant="standard"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        sx={{ flex: 1 }}
-      />
-      <Button
-        variant="contained"
-        color={isFiltered ? 'secondary' : 'info'}
-        sx={{ minWidth: 100 }}
-        onClick={toggle}
-      >
-        {isFiltered ? 'Clear' : 'Apply'}
-      </Button>
-    </Row>
-  );
-};
-
-const TodoForm = ({ onSave }) => {
-  const [name, setName] = useState('');
-
-  const save = (e) => {
-    e.preventDefault();
-    onSave(name.trim());
-    setName('');
-  };
-
-  return (
-    <form onSubmit={save}>
-      <Row>
-        <TextField
-          label="New task"
-          variant="standard"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          sx={{ flex: 1 }}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="success"
-          sx={{ minWidth: 100 }}
-        >
-          Save
-        </Button>
-      </Row>
-    </form>
-  );
-};
+import { useAddTodo } from '../hooks';
+import Toolbar from './Toolbar';
+import TodoForm from './TodoForm';
+import { Lanes } from '../../lanes';
+import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
 
 const TodoList = () => {
+  const [search, setSearch] = useState('');
   const [addTodo] = useAddTodo();
-  const { refetch } = useLanesWithTodos();
-  const [filtered, setFiltered] = useState(false);
 
-  const saveTodo = async (name) => {
+  const saveTodo = async name => {
     if (!name) {
-      toast.info(`Task name can not be empty!`)
+      toast.info('Task name cannot be empty');
       return;
     }
 
@@ -116,29 +24,29 @@ const TodoList = () => {
         variables: { values: { name } },
         awaitRefetchQueries: true,
         refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
-      })
-
-      toast.success('New Task Added');
-    } catch (error) {
-      toast.error(`Was not possible to add Task. Error: ${error.message}`)
+      });
+      toast.success('New task added');
+    } catch (err) {
+      toast.error(`Unable to add task. ${err.message}`);
     }
   };
 
-  const applyFilter = (text) => {
-    const filter = text ? { name: text } : null;
-    refetch({ filter });
-    setFiltered(!!text);
-  };
-
   return (
-    <Wrapper>
-      <Card>
-        <h2 style={{ margin: 0, textAlign: 'center' }}>TODO LIST</h2>
-        <Toolbar onApply={applyFilter} isFiltered={filtered} />
-        <TodoForm onSave={saveTodo} />
-        <Lanes />
+    <Box width="100%" maxWidth={1024} mx="auto">
+      <Card elevation={6}>
+        <CardContent>
+          <Typography variant="h4" textAlign="center" mb={2} fontWeight={700}>
+            TODO LIST
+          </Typography>
+
+          <Box display="flex" flexDirection="column" gap={2}>
+            <Toolbar onApply={setSearch} />
+            <TodoForm onSave={saveTodo} />
+            <Lanes searchTerm={search} />
+          </Box>
+        </CardContent>
       </Card>
-    </Wrapper>
+    </Box>
   );
 };
 

@@ -1,34 +1,22 @@
 :root {
   --background-color: #ffffff;
   --text-color: #000000;
-  --card-background: #dcdcdc;
-  --lane-background: #f4f5f7;
-  --scroll-background: #efefef;
-  --todo-background: #ffffff;
 }
 
 [data-theme='dark'] {
-  --background-color: #212b36;
+  --background-color: #121212;
   --text-color: #ffffff;
-  --card-background: #2e3b47;
-  --lane-background: #35404b;
-  --scroll-background: #2b3742;
-  --todo-background: #3e4a56;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }

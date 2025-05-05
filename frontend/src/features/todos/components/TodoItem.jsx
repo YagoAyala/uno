@@ -1,51 +1,77 @@
 import { useState } from 'react';
-import { ListItem, ListItemButton, ListItemText } from '@mui/material';
-import { Edit, Delete as DeleteIcon } from '@mui/icons-material';
+import {
+  ListItem,
+  ListItemButton,
+  ListItemText,
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
 import { Draggable } from '@hello-pangea/dnd';
+
 import RenameTodoModal from './RenameTodoModal';
 import DeleteTodoModal from './DeleteTodoModal';
 
-const TodoItem = ({ todo, index, done }) => {
+const escapeRegExp = str =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const highlight = (text, term) => {
+  if (!term) return text;
+  const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+  return text.split(regex).map((part, i) =>
+    regex.test(part) ? (
+      <span
+        key={i}
+        style={{
+          backgroundColor: 'rgba(255,255,0,0.4)',
+          paddingInline: 2,
+          borderRadius: 2,
+        }}
+      >
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+};
+
+const TodoItem = ({ todo, index, done, searchTerm }) => {
   const [openRename, setOpenRename] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-
-  const rename = () => setOpenRename(true);
-  const remove = () => setOpenDelete(true);
 
   return (
     <>
       <Draggable draggableId={String(todo.id)} index={index}>
-        {(prov) => (
+        {provided => (
           <ListItem
-            ref={prov.innerRef}
-            {...prov.draggableProps}
-            {...prov.dragHandleProps}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
             disablePadding
             sx={{
               mb: 1,
+              opacity: done ? 0.5 : 1,
+              textDecoration: done ? 'line-through' : 'none',
+              bgcolor: 'background.paper',
               borderRadius: 1,
-              background: 'var(--todo-background)',
-              opacity: done ? 0.6 : 1,
-              transition: 'background 0.3s ease',
+              transition: 'background 0.2s ease',
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
             }}
           >
             <ListItemButton dense>
               <ListItemText
-                primaryTypographyProps={{
-                  style: {
-                    textDecoration: done ? 'line-through' : 'none',
-                    color: done ? 'gray' : undefined,
-                  },
-                }}
-                primary={todo.name}
+                primary={highlight(todo.name, searchTerm)}
               />
               <Edit
-                sx={{ cursor: 'pointer', mr: 1, color: done ? 'gray' : 'inherit' }}
-                onClick={rename}
+                sx={{ cursor: 'pointer', mr: 1 }}
+                onClick={() => setOpenRename(true)}
+                fontSize="small"
               />
-              <DeleteIcon
-                sx={{ cursor: 'pointer', color: done ? 'gray' : 'inherit' }}
-                onClick={remove}
+              <Delete
+                sx={{ cursor: 'pointer' }}
+                onClick={() => setOpenDelete(true)}
+                fontSize="small"
               />
             </ListItemButton>
           </ListItem>

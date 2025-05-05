@@ -1,39 +1,33 @@
-import styled from 'styled-components';
 import { Droppable } from '@hello-pangea/dnd';
+import { Paper, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
-const Column = styled.div`
-  width: 280px;
-  background: var(--lane-background);
-  border-radius: 6px;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  transition: background 0.3s ease;
-`;
+const Column = styled(Paper)(({ theme }) => ({
+  width: 300,
+  padding: theme.spacing(1.5),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+  background: theme.palette.background.paper,
+  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+  '&:hover': {
+    boxShadow: theme.shadows[6],
+    transform: 'translateY(-2px)',
+  },
+}));
 
-const LaneHeader = styled.h3`
-  margin: 0;
-  font-size: 18px;
-  text-align: center;
-`;
-
-const LaneColumn = ({ lane, children }) => {
-  if (!lane) {
-    return null;
-  }
-
-  return (
-    <Droppable droppableId={String(lane.id)}>
-      {(prov) => (
-        <Column ref={prov.innerRef} {...prov.droppableProps}>
-          <LaneHeader>{lane.name}</LaneHeader>
-          {children}
-          {prov.placeholder}
-        </Column>
-      )}
-    </Droppable>
-  );
-};
+const LaneColumn = ({ lane, children }) => (
+  <Droppable droppableId={String(lane.id)}>
+    {provided => (
+      <Column ref={provided.innerRef} {...provided.droppableProps} elevation={3}>
+        <Typography variant="subtitle1" fontWeight={600}>
+          {lane.name}
+        </Typography>
+        {children}
+        {provided.placeholder}
+      </Column>
+    )}
+  </Droppable>
+);
 
 export default LaneColumn;

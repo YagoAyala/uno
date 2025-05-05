@@ -1,39 +1,30 @@
 import { useState } from 'react';
-import { TextField, Button } from '@mui/material';
-import { useAddTodo } from '../hooks';
+import { Box, TextField, Button } from '@mui/material';
 
-const TodoForm = () => {
+const TodoForm = ({ onSave }) => {
   const [taskName, setTaskName] = useState('');
-  const [addTodo] = useAddTodo();
 
-  const handleSubmit = async (e) => {
+  const submit = e => {
     e.preventDefault();
+    if (!taskName.trim()) return;
 
-    if (!taskName.trim()) {
-      return;
-    }
-
-    await addTodo({
-      variables: { values: { name: taskName.trim() } },
-    });
-
+    onSave(taskName.trim());
     setTaskName('');
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 16 }}>
+    <Box component="form" display="flex" gap={2} onSubmit={submit}>
       <TextField
         label="New task"
         variant="standard"
+        fullWidth
         value={taskName}
-        onChange={(e) => {
-          setTaskName(e.target.value);
-        }}
+        onChange={e => setTaskName(e.target.value)}
       />
       <Button type="submit" variant="contained" color="success">
         Save
       </Button>
-    </form>
+    </Box>
   );
 };
 

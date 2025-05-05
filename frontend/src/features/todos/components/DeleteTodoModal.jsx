@@ -1,8 +1,14 @@
-import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
-import { useDeleteTodo } from '../hooks';
-import { getOperationName } from '@apollo/client/utilities';
-import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
+import {
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
+} from '@mui/material';
 import { toast } from 'react-toastify';
+import { getOperationName } from '@apollo/client/utilities';
+
+import { useDeleteTodo } from '../hooks';
+import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
 
 const DeleteTodoModal = ({ open, onClose, todo }) => {
   const [deleteTodo] = useDeleteTodo();
@@ -20,19 +26,20 @@ const DeleteTodoModal = ({ open, onClose, todo }) => {
         refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
       });
 
-      toast.success('Task Deleted');
+      toast.success('Task deleted');
     } catch (error) {
-      toast.error(`Was not possible to edit Task. Error: ${error.message}`);
+      toast.error(`Unable to delete task. ${error.message}`);
     }
 
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>
+    <Dialog open={open} onClose={onClose} aria-labelledby="delete-task-title">
+      <DialogTitle id="delete-task-title">
         Delete <strong>{todo?.name}</strong>?
       </DialogTitle>
+
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button variant="contained" color="error" onClick={handleDelete}>
