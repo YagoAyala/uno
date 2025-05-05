@@ -6,6 +6,7 @@ export const TODOS_QUERY = gql`
       id
       name
       lane_id
+      priority_id
     }
   }
 `;
@@ -49,7 +50,18 @@ export const LANES_TODOS_QUERY = gql`
         id
         name
         lane_id
+        priority_id
       }
+    }
+  }
+`;
+
+export const PRIORITIES_QUERY = gql`
+  query Priorities {
+    priorities {
+      id
+      name
+      color
     }
   }
 `;

@@ -13,7 +13,8 @@ const TodoList = () => {
   const [search, setSearch] = useState('');
   const [addTodo] = useAddTodo();
 
-  const saveTodo = async name => {
+  const saveTodo = async values => {
+    const { name } = values;
     if (!name) {
       toast.info('Task name cannot be empty');
       return;
@@ -21,7 +22,7 @@ const TodoList = () => {
 
     try {
       await addTodo({
-        variables: { values: { name } },
+        variables: { values },
         awaitRefetchQueries: true,
         refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
       });

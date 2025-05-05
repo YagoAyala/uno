@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -6,64 +6,62 @@ import {
   DialogActions,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
-import { toast } from 'react-toastify';
-import { getOperationName } from '@apollo/client/utilities';
-
 import { useUpdateTodo } from '../hooks';
-import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
+import { useQuery } from '@apollo/client';
+import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
 
 const RenameTodoModal = ({ open, onClose, todo }) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState(todo.name);
+  const [priority, setPriority] = useState(todo.priority_id);
   const [updateTodo] = useUpdateTodo();
 
-  useEffect(() => {
-    setName(todo?.name || '');
-  }, [todo]);
+  const { data, loading } = useQuery(PRIORITIES_QUERY);
 
-  const handleSave = async () => {
-    if (!name.trim() || !todo) {
-      onClose();
-      return;
-    }
+  const priorities = data?.priorities ?? [];
 
-    const updatedTodo = { ...todo, name: name.trim() };
-    delete updatedTodo.__typename;
-
-    try {
-      await updateTodo({
-        variables: { values: updatedTodo },
-        awaitRefetchQueries: true,
-        refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
-      });
-
-      toast.success('Task renamed');
-    } catch (error) {
-      toast.error(`Unable to edit task. ${error.message}`);
-    }
-
+  const submit = async () => {
+    await updateTodo({
+      variables: { values: { id: todo.id, name, priority_id: priority } },
+      awaitRefetchQueries: true,
+    });
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose} aria-labelledby="rename-task-title">
-      <DialogTitle id="rename-task-title">Rename task</DialogTitle>
-
-      <DialogContent>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Edit Task</DialogTitle>
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
         <TextField
-          autoFocus
-          fullWidth
-          margin="dense"
-          label="Task name"
+          label="Name"
           variant="standard"
+          fullWidth
           value={name}
           onChange={e => setName(e.target.value)}
         />
+        <FormControl variant="standard" disabled={loading}>
+          <InputLabel id="edit-priority-label">Priority</InputLabel>
+          <Select
+            labelId="edit-priority-label"
+            value={priority}
+            onChange={e => setPriority(e.target.value)}
+            label="Priority"
+          >
+            {priorities.map(p => (
+              <MenuItem key={p.id} value={p.id}>
+                {p.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
-
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button variant="contained" onClick={handleSave}>
+        <Button onClick={submit} variant="contained" disabled={loading}>
           Save
         </Button>
       </DialogActions>

@@ -1,19 +1,28 @@
+type Priority {
+  id: Int
+  name: String
+  color: String
+}
+
 type Item {
   id: Int
   name: String
-  lane_id: Int 
+  lane_id: Int
+  priority_id: Int
 }
 
 input ItemInput {
   id: Int
   name: String
-  lane_id: Int 
+  lane_id: Int
+  priority_id: Int
 }
 
 input ItemFilter {
   id: Int
   name: String
   lane_id: Int
+  priority_id: Int
 }
 
 type Query {
@@ -22,8 +31,6 @@ type Query {
 
 type Mutation {
   addItem(values: ItemInput): Boolean
-
   updateItem(values: ItemInput): Boolean
-
   deleteItem(id: Int!): Boolean
 }

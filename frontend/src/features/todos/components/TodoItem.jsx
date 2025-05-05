@@ -3,6 +3,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Chip,
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { Draggable } from '@hello-pangea/dnd';
@@ -34,6 +35,20 @@ const highlight = (text, term) => {
   );
 };
 
+const labels = {
+  1: 'None',
+  2: 'Low',
+  3: 'Medium',
+  4: 'High',
+};
+
+const colors = {
+  1: '#9e9e9e',
+  2: '#4caf50',
+  3: '#ff9800',
+  4: '#f44336',
+};
+
 const TodoItem = ({ todo, index, done, searchTerm }) => {
   const [openRename, setOpenRename] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -59,12 +74,28 @@ const TodoItem = ({ todo, index, done, searchTerm }) => {
               },
             }}
           >
-            <ListItemButton dense>
+            <ListItemButton
+              dense
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                columnGap: 1.5,
+              }}
+            >
               <ListItemText
                 primary={highlight(todo.name, searchTerm)}
+                sx={{ flexGrow: 1 }}
+              />
+              <Chip
+                label={labels[todo.priority_id] ?? 'None'}
+                size="small"
+                sx={{
+                  bgcolor: colors[todo.priority_id] ?? '#9e9e9e',
+                  color: '#fff',
+                }}
               />
               <Edit
-                sx={{ cursor: 'pointer', mr: 1 }}
+                sx={{ cursor: 'pointer' }}
                 onClick={() => setOpenRename(true)}
                 fontSize="small"
               />

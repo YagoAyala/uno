@@ -1,0 +1,9 @@
+type Priority {
+  id: Int
+  name: String
+  color: String
+}
+
+extend type Query {
+  priorities: [Priority]
+}
