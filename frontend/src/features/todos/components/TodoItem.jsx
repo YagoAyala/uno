@@ -7,12 +7,13 @@ import {
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import { Draggable } from '@hello-pangea/dnd';
+import { useQuery } from '@apollo/client';
 
 import RenameTodoModal from './RenameTodoModal';
 import DeleteTodoModal from './DeleteTodoModal';
+import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
 
-const escapeRegExp = str =>
-  str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const highlight = (text, term) => {
   if (!term) return text;
@@ -35,23 +36,13 @@ const highlight = (text, term) => {
   );
 };
 
-const labels = {
-  1: 'None',
-  2: 'Low',
-  3: 'Medium',
-  4: 'High',
-};
-
-const colors = {
-  1: '#9e9e9e',
-  2: '#4caf50',
-  3: '#ff9800',
-  4: '#f44336',
-};
-
 const TodoItem = ({ todo, index, done, searchTerm }) => {
   const [openRename, setOpenRename] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+
+  const { data } = useQuery(PRIORITIES_QUERY);
+  const priorities = data?.priorities ?? [];
+  const priorityInfo = priorities.find(p => p.id === todo.priority_id);
 
   return (
     <>
@@ -69,31 +60,24 @@ const TodoItem = ({ todo, index, done, searchTerm }) => {
               bgcolor: 'background.paper',
               borderRadius: 1,
               transition: 'background 0.2s ease',
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
+              '&:hover': { bgcolor: 'action.hover' },
             }}
           >
             <ListItemButton
               dense
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                columnGap: 1.5,
-              }}
+              sx={{ display: 'flex', alignItems: 'center', columnGap: 1.5 }}
             >
               <ListItemText
                 primary={highlight(todo.name, searchTerm)}
                 sx={{ flexGrow: 1 }}
               />
-              <Chip
-                label={labels[todo.priority_id] ?? 'None'}
-                size="small"
-                sx={{
-                  bgcolor: colors[todo.priority_id] ?? '#9e9e9e',
-                  color: '#fff',
-                }}
-              />
+              {priorityInfo && (
+                <Chip
+                  label={priorityInfo.name}
+                  size="small"
+                  sx={{ bgcolor: priorityInfo.color, color: '#fff' }}
+                />
+              )}
               <Edit
                 sx={{ cursor: 'pointer' }}
                 onClick={() => setOpenRename(true)}

@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const Todo = require('./todo.model');
+const Todo   = require('./todo.model');
 
 /**
  * Find all todos with optional filtering.
@@ -10,13 +10,8 @@ const Todo = require('./todo.model');
  */
 const findAll = async (filter = {}) => {
   const where = {};
-  if (filter.id) {
-    where.id = filter.id;
-  }
-
-  if (filter.name) {
-    where.name = { [Op.iLike]: `%${filter.name}%` };
-  }
+  if (filter.id)   where.id   = filter.id;
+  if (filter.name) where.name = { [Op.iLike]: `%${filter.name}%` };
 
   const items = await Todo.findAll({ where });
 
@@ -40,11 +35,15 @@ const findByName = async (name) => {
  * Insert a new todo with default lane id 1.
  *
  * @async
- * @param {string} name - Todo name.
+ * @param {{name: string, priority_id?: number}} values - Todo values.
  * @returns {Promise<Object>} The created todo.
  */
-const insert = async (name) => {
-  const created = await Todo.create({ name, lane_id: 1 });
+const insert = async ({ name, priority_id = 1 }) => {
+  const created = await Todo.create({
+    name,
+    lane_id: 1,
+    priority_id,
+  });
 
   return created;
 };
@@ -58,7 +57,10 @@ const insert = async (name) => {
  * @returns {Promise<boolean>} True if exactly one row was updated.
  */
 const update = async (id, values) => {
-  const [rows] = await Todo.update(values, { where: { id } });
+  const [rows] = await Todo.update(
+    { ...values, updated_at: new Date() },
+    { where: { id } },
+  );
   const success = rows === 1;
 
   return success;
@@ -73,7 +75,10 @@ const update = async (id, values) => {
  * @returns {Promise<void>}
  */
 const updateLaneId = async (id, laneId) => {
-  await Todo.update({ lane_id: laneId }, { where: { id } });
+  await Todo.update(
+    { lane_id: laneId, updated_at: new Date() },
+    { where: { id } },
+  );
 };
 
 /**

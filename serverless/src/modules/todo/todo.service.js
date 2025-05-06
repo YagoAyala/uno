@@ -16,11 +16,11 @@ const listItems = async (filter) => {
  * Create a new todo.
  *
  * @async
- * @param {{name: string}} values - Todo values.
+ * @param {{name: string, priority_id?: number}} values - Todo values.
  * @throws {Error} If name is empty or duplicate.
  * @returns {Promise<void>}
  */
-const createItem = async ({ name }) => {
+const createItem = async ({ name, priority_id = 1 }) => {
   if (!name?.trim()) {
     throw new Error('Name cannot be empty');
   }
@@ -31,14 +31,14 @@ const createItem = async ({ name }) => {
     throw new Error('Duplicate item');
   }
 
-  await repository.insert(name.trim());
+  await repository.insert({ name: name.trim(), priority_id });
 };
 
 /**
  * Rename/update a todo.
  *
  * @async
- * @param {{id: number, name?: string}} todo - Todo update.
+ * @param {{id: number, name?: string, priority_id?: number}} todo - Todo update.
  * @throws {Error} If validation fails or item not found.
  * @returns {Promise<boolean>} True if update succeeded.
  */

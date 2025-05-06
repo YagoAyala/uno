@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   TextField,
@@ -8,17 +8,21 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
-
-const priorities = [
-  { id: 1, label: 'Without priority' },
-  { id: 2, label: 'Low' },
-  { id: 3, label: 'Medium' },
-  { id: 4, label: 'High' },
-];
+import { useQuery } from '@apollo/client';
+import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
 
 const TodoForm = ({ onSave }) => {
+  const { data, loading } = useQuery(PRIORITIES_QUERY);
+  const priorities = data?.priorities ?? [];
+
   const [taskName, setTaskName] = useState('');
   const [priority, setPriority] = useState(1);
+
+  useEffect(() => {
+    if (priorities.length && !priority) {
+      setPriority(priorities[0].id);
+    }
+  }, [priorities]);
 
   const submit = e => {
     e.preventDefault();
@@ -26,7 +30,7 @@ const TodoForm = ({ onSave }) => {
 
     onSave({ name: taskName.trim(), priority_id: priority });
     setTaskName('');
-    setPriority(1);
+    if (priorities.length) setPriority(priorities[0].id);
   };
 
   return (
@@ -38,7 +42,11 @@ const TodoForm = ({ onSave }) => {
         value={taskName}
         onChange={e => setTaskName(e.target.value)}
       />
-      <FormControl variant="standard" sx={{ minWidth: 120 }}>
+      <FormControl
+        variant="standard"
+        sx={{ minWidth: 120 }}
+        disabled={loading}
+      >
         <InputLabel id="priority-label">Priority</InputLabel>
         <Select
           labelId="priority-label"
@@ -48,7 +56,7 @@ const TodoForm = ({ onSave }) => {
         >
           {priorities.map(p => (
             <MenuItem key={p.id} value={p.id}>
-              {p.label}
+              {p.name}
             </MenuItem>
           ))}
         </Select>

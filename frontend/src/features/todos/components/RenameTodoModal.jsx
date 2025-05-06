@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -13,7 +13,11 @@ import {
 } from '@mui/material';
 import { useUpdateTodo } from '../hooks';
 import { useQuery } from '@apollo/client';
-import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
+import {
+  PRIORITIES_QUERY,
+  LANES_TODOS_QUERY,
+} from '../../../api/graphql/queries';
+import { getOperationName } from '@apollo/client/utilities';
 
 const RenameTodoModal = ({ open, onClose, todo }) => {
   const [name, setName] = useState(todo.name);
@@ -21,13 +25,18 @@ const RenameTodoModal = ({ open, onClose, todo }) => {
   const [updateTodo] = useUpdateTodo();
 
   const { data, loading } = useQuery(PRIORITIES_QUERY);
-
   const priorities = data?.priorities ?? [];
+
+  useEffect(() => {
+    setName(todo.name);
+    setPriority(todo.priority_id);
+  }, [todo]);
 
   const submit = async () => {
     await updateTodo({
       variables: { values: { id: todo.id, name, priority_id: priority } },
       awaitRefetchQueries: true,
+      refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
     });
     onClose();
   };
@@ -35,7 +44,9 @@ const RenameTodoModal = ({ open, onClose, todo }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Edit Task</DialogTitle>
-      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
+      <DialogContent
+        sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}
+      >
         <TextField
           label="Name"
           variant="standard"
