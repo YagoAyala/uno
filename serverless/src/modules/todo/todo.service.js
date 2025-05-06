@@ -80,6 +80,6 @@ const removeItem = async (id) => {
 module.exports = {
   listItems,
   createItem,
-  renameItem,
+  updateItem,
   removeItem,
 };
