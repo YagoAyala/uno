@@ -9,10 +9,10 @@ const Column = styled(Paper)(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(1),
   background: theme.palette.background.paper,
-  transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+  overflow: 'visible',
+  transition: 'box-shadow 0.3s ease',
   '&:hover': {
     boxShadow: theme.shadows[6],
-    transform: 'translateY(-2px)',
   },
 }));
 
