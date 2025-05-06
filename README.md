@@ -50,13 +50,11 @@ Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*, desenvo
 
 ### ⚙️ Dev friendliness
 
-* **Hot reload** (CRA) e `npm run dev` no back-end.
-* **GraphQL Schema modular** (type-graphql files + `makeExecutableSchema`).
+* **Hot reload** (CRA) e `npm run start` no back-end.
 * **Apollo Client** com cache configurado e `refetchQueries` nos mutations principais.
 * **Testes** unitários + integração (Jest 29 / Supertest) usando SQLite-in-memory.
 * **Docker Compose** apenas para Postgres, mas pronto para extensão full-stack.
 * **Migrations + seeders** gerando dados demo (inclui níveis de prioridade com cores).
-
 
 ---
 
@@ -71,9 +69,9 @@ uno/
 │      ├─ features/          # Slices orientados a domínio
 │      │   ├─ lanes/         # Colunas do board
 │      │   └─ todos/         # Cards e filtros
-│      ├─ pages/             # Rotas
+│      ├─ pages/             
 │      ├─ ui/                # Componentes atômicos
-│      ├─ contexts/          # React Contexts (ex.: tema)
+│      ├─ contexts/          # React Contexts
 │      └─ hooks/             # Hooks reutilizáveis
 │
 └─ serverless/               # API GraphQL (Node 18)
@@ -81,12 +79,12 @@ uno/
     ├─ src/
     │   ├─ db/               # Sequelize (config, migrations, seeders)
     │   ├─ modules/          # Domain-driven modules (model, repo, service, resolver)
-    │   ├─ schema.js         # MergeTypes + makeExecutableSchema
-    │   └─ server.js         # Express/Lambda handler
+    │   ├─ schema.js         # MergeTypes
+    │   └─ server.js         
     └─ tests/                # Unit + integration (Jest + Supertest)
 ````
 
-> A pasta `.github/workflows` contém o pipeline de CI; `.vscode/` traz *launch configs* e *settings* de formatação/ESLint.
+> A pasta `.github/workflows` contém o pipeline de CI; `.vscode/` traz *launch configs* e *settings*.
 
 ---
 
