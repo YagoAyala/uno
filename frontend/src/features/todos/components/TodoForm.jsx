@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Box,
   TextField,
@@ -13,7 +13,7 @@ import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
 
 const TodoForm = ({ onSave }) => {
   const { data, loading } = useQuery(PRIORITIES_QUERY);
-  const priorities = data?.priorities ?? [];
+  const priorities = useMemo(() => data?.priorities ?? [], [data]);
 
   const [taskName, setTaskName] = useState('');
   const [priority, setPriority] = useState(1);
