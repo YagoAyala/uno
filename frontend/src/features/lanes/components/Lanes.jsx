@@ -25,22 +25,35 @@ const Lanes = ({ searchTerm = '', filters = {} }) => {
   const { data, loading, refetch } = useLanesWithTodos();
   const [updateTodo] = useUpdateTodo();
 
-  if (loading) return null;
+  if (loading) {
+    return null;
+  }
 
   let lanes = data?.lanesWithItem ?? [];
-  if (filters.done === 'done') lanes = lanes.filter(l => l.is_done);
-  if (filters.done === 'not_done') lanes = lanes.filter(l => !l.is_done);
+  if (filters.done === 'done') {
+    lanes = lanes.filter(l => l.is_done);
+  }
+
+  if (filters.done === 'not_done') {
+    lanes = lanes.filter(l => !l.is_done);
+  }
 
   const lowerSearch = searchTerm.toLowerCase();
 
   const onDragEnd = async result => {
     const { destination, draggableId } = result;
-    if (!destination) return;
+
+    if (!destination) {
+      return;
+    }
 
     const destLaneId = Number(destination.droppableId);
     const todoId = Number(draggableId);
     const todoData = lanes.flatMap(l => l.todos).find(t => t.id === todoId);
-    if (!todoData) return;
+
+    if (!todoData) {
+      return;
+    }
 
     const updatedTodo = { ...todoData, lane_id: destLaneId };
     delete updatedTodo.__typename;
@@ -58,10 +71,12 @@ const Lanes = ({ searchTerm = '', filters = {} }) => {
       <Row>
         {lanes.map(lane => {
           let list = lane.todos;
+
           if (filters.priority && filters.priority !== 'all') {
             const pid = Number(filters.priority);
             list = list.filter(t => t.priority_id === pid);
           }
+
           list = list.filter(t => (lowerSearch ? t.name.toLowerCase().includes(lowerSearch) : true));
 
           switch (filters.sort) {

@@ -26,11 +26,17 @@ const TodoForm = ({ onSave }) => {
 
   const submit = e => {
     e.preventDefault();
-    if (!taskName.trim()) return;
+
+    if (!taskName.trim()) {
+      return;
+    }
 
     onSave({ name: taskName.trim(), priority_id: priority });
     setTaskName('');
-    if (priorities.length) setPriority(priorities[0].id);
+
+    if (priorities.length) {
+      setPriority(priorities[0].id);
+    }
   };
 
   return (

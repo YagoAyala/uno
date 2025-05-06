@@ -34,6 +34,7 @@ const mutationResolvers = {
     const result = await service.createItem(values);
     return result;
   },
+
   /**
    * Resolver for `updateItem` mutation.
    *
@@ -42,9 +43,10 @@ const mutationResolvers = {
    * @returns {Promise<boolean>}
    */
   updateItem: async (_p, { values }) => {
-    const result = await service.renameItem(values);
+    const result = await service.updateItem(values);
     return result;
   },
+
   /**
    * Resolver for `deleteItem` mutation.
    *

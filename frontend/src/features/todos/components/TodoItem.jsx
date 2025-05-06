@@ -16,8 +16,12 @@ import { PRIORITIES_QUERY } from '../../../api/graphql/queries';
 const escapeRegExp = str => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const highlight = (text, term) => {
-  if (!term) return text;
+  if (!term) {
+    return text;
+  }
+
   const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+
   return text.split(regex).map((part, i) =>
     regex.test(part) ? (
       <span

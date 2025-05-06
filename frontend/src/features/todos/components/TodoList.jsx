@@ -19,6 +19,7 @@ const TodoList = () => {
       toast.info('Task name cannot be empty');
       return;
     }
+
     try {
       await addTodo({
         variables: { values },

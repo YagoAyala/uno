@@ -42,7 +42,7 @@ const createItem = async ({ name, priority_id = 1 }) => {
  * @throws {Error} If validation fails or item not found.
  * @returns {Promise<boolean>} True if update succeeded.
  */
-const renameItem = async (todo) => {
+const updateItem = async (todo) => {
   const todoId = todo.id;
   delete todo.id;
 

@@ -38,6 +38,7 @@ const RenameTodoModal = ({ open, onClose, todo }) => {
       awaitRefetchQueries: true,
       refetchQueries: [getOperationName(LANES_TODOS_QUERY)],
     });
+
     onClose();
   };
 
