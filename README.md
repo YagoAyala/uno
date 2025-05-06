@@ -2,6 +2,8 @@
 
 Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*, desenvolvida como desafio técnico da **UNO**.
 
+[demo-video.webm](https://github.com/user-attachments/assets/f71e0c0e-a767-404f-a360-ca233e88cd5b)
+
 ---
 
 ## 💡 Visão geral
