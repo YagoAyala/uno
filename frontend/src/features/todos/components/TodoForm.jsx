@@ -22,7 +22,7 @@ const TodoForm = ({ onSave }) => {
     if (priorities.length && !priority) {
       setPriority(priorities[0].id);
     }
-  }, [priorities]);
+  }, [priorities, priority]);
 
   const submit = e => {
     e.preventDefault();
