@@ -1,15 +1,11 @@
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from '@mui/material';
+import { Box, TextField, InputAdornment, IconButton } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import useDebounce from '../../../hooks/useDebounce';
+import QuickFilters from './QuickFilters';
 
-const Toolbar = ({ onApply }) => {
+const Toolbar = ({ onApply, onFilters }) => {
   const [text, setText] = useState('');
   const debounced = useDebounce(text, 400);
 
@@ -18,13 +14,13 @@ const Toolbar = ({ onApply }) => {
   }, [debounced, onApply]);
 
   return (
-    <Box display="flex" gap={2} flexWrap="wrap" width="100%">
+    <Box display="flex" gap={2} alignItems="center" width="100%">
       <TextField
         variant="outlined"
         placeholder="Search tasks..."
-        fullWidth
         value={text}
         onChange={e => setText(e.target.value)}
+        sx={{ flexGrow: 1 }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -45,6 +41,7 @@ const Toolbar = ({ onApply }) => {
           ),
         }}
       />
+      <QuickFilters onApply={onFilters} />
     </Box>
   );
 };

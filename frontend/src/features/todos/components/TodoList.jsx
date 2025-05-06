@@ -11,15 +11,14 @@ import { LANES_TODOS_QUERY } from '../../../api/graphql/queries';
 
 const TodoList = () => {
   const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState({});
   const [addTodo] = useAddTodo();
 
   const saveTodo = async values => {
-    const { name } = values;
-    if (!name) {
+    if (!values.name) {
       toast.info('Task name cannot be empty');
       return;
     }
-
     try {
       await addTodo({
         variables: { values },
@@ -41,9 +40,9 @@ const TodoList = () => {
           </Typography>
 
           <Box display="flex" flexDirection="column" gap={2}>
-            <Toolbar onApply={setSearch} />
+            <Toolbar onApply={setSearch} onFilters={setFilters} />
             <TodoForm onSave={saveTodo} />
-            <Lanes searchTerm={search} />
+            <Lanes searchTerm={search} filters={filters} />
           </Box>
         </CardContent>
       </Card>
