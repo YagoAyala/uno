@@ -1,171 +1,154 @@
-
 # UNO Challenge · Lista de Tarefas 🗒️
 
-Repositório-base do desafio técnico da **UNO**.  
-**A aplicação inclui:**
-
-| Camada | Tecnologias principais |
-| ------ | ---------------------- |
-| **Frontend** | React 18 (Create-React-App), Material UI v5, Apollo Client 3, react-toastify, styled-components |
-| **Backend** | Node 18, Apollo Server 4, GraphQL-Tools, Sequelize 6 (PostgreSQL), dotenv |
-| **Teste**   | Jest 29 + Supertest |
-| **Infra**   | `docker-compose` (container único para **PostgreSQL**) |
+Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*, desenvolvida como desafio técnico da **UNO**.
 
 ---
 
-## Estrutura de pastas
+## 💡 Visão geral
+
+| Camada      | Techs-chave                                                                                           |
+|-------------|--------------------------------------------------------------------------------------------------------|
+| **Frontend**| React 18 (CRA), Material UI v5, Apollo Client 3, react-toastify, styled-components                     |
+| **Backend** | Node 18, Apollo Server 4, GraphQL-Tools, Sequelize 6 (PostgreSQL)                                      |
+| **Testes**  | Jest 29, Supertest                                                                                    |
+| **Infra**   | `docker-compose` (PostgreSQL)|
+
+---
+
+## 🚀 Funcionalidades
+
+### 🏗️ Core (CRUD + board)
+
+* **Criar, renomear e excluir tarefas**
+
+  * Valida duplicidade de nome e campos vazios no service do back-end.
+* **Drag & drop de cards** entre colunas, com persistência imediata da nova posição no Postgres.
+* **Reordenação de colunas (lanes)** — alteração do campo `position` no banco; reflete na UI na próxima consulta.
+* **Conclusão automática**: ao mover o card para uma lane cujo `is_done = true`, o item é marcado como finalizado.
+* **Prioridades coloridas**
+
+  * Tabela `priorities` (`without_priority`, low, medium, high) com cor HEX por nível.
+  * Selecionável no `TodoForm` e exibida como **Chip** no card.
+
+### 🔍 Pesquisa, filtros e ordenação
+
+| Recurso                   | Detalhes                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Busca textual**         | *Debounce* de **400 ms** (`useDebounce`) + **realce** dos termos no resultado                          |
+| **Filtro por prioridade** | “All / sem prioridade / baixa / média / alta”                                                          |
+| **Filtro por status**     | “All / Done / Not done”                                                                                |
+| **Ordenação dinâmica**    | - Prioridade **Low → High** ou **High → Low**<br>- Nome **A → Z** ou **Z → A**                         |
+| **Composição de filtros** | Todos os filtros podem ser combinados com a busca; tudo processado client-side para evitar round-trips |
+| **UI compacta**           | Ícone *filter list* abre `Popover` com `<Select>` empilhados                                           |
+
+### 💎 UX & UI
+
+* **Feedback instantâneo** com **react-toastify** (sucesso, erro, aviso).
+* **Dark / Light mode** — toggle global (Material UI + Context API).
+* **Highlight** de busca em cards (trecho amarelo translúcido, borda arredondada).
+* Efeitos sutis de *hover* e *elevation* nas colunas/cards.
+
+### ⚙️ Dev friendliness
+
+* **Hot reload** (CRA) e `npm run dev` no back-end.
+* **GraphQL Schema modular** (type-graphql files + `makeExecutableSchema`).
+* **Apollo Client** com cache configurado e `refetchQueries` nos mutations principais.
+* **Testes** unitários + integração (Jest 29 / Supertest) usando SQLite-in-memory.
+* **Docker Compose** apenas para Postgres, mas pronto para extensão full-stack.
+* **Migrations + seeders** gerando dados demo (inclui níveis de prioridade com cores).
+
+
+---
+
+## 🗂️ Estrutura de pastas
 
 ```text
 uno/
-├─ .github/                       # Workflows de CI
-│  └─ workflows/
-├─ .vscode/                       # Configs de debug/format
-├─ frontend/                      # React 18 (CRA)
+├─ frontend/                 # React (Create-React-App)
 │  ├─ public/
 │  └─ src/
-│      ├─ api/
-│      │   └─ graphql/            # Apollo client + documents
-│      │       ├─ client.js
-│      │       └─ queries.js
-│      ├─ features/               # “Domain-driven” slices
-│      │   ├─ lanes/
-│      │   └─ todos/
-│      ├─ pages/
-│      │   └─ BoardPage.jsx
-│      ├─ ui/
-│      │   └─ Card.jsx            # Átomos genéricos
-│      ├─ ToastProvider.jsx       # Contexto de toasts
-│      ├─ App.jsx
-│      └─ index.jsx
-└─ serverless/                    # API GraphQL (Node 18)
-    ├─ docker-compose.yml         # Banco de dados local
+│      ├─ api/graphql/       # Apollo client + documents (.graphql / .js)
+│      ├─ features/          # Slices orientados a domínio
+│      │   ├─ lanes/         # Colunas do board
+│      │   └─ todos/         # Cards e filtros
+│      ├─ pages/             # Rotas
+│      ├─ ui/                # Componentes atômicos
+│      ├─ contexts/          # React Contexts (ex.: tema)
+│      └─ hooks/             # Hooks reutilizáveis
+│
+└─ serverless/               # API GraphQL (Node 18)
+    ├─ docker-compose.yml    # Postgres local
     ├─ src/
-    │   ├─ db/
-    │   │   ├─ config.js          # Config Sequelize
-    │   │   ├─ migrations/
-    │   │   └─ seeders/
-    │   ├─ modules/
-    │   ├─ db.js                  # Conexão Sequelize/Postgres
-    │   ├─ schema.js              # Merge dinâmico de 
-    │   └─ server.js              # Lambda/Express handler
-    └─ tests/
-        ├─ integration/
-        └─ unit/
+    │   ├─ db/               # Sequelize (config, migrations, seeders)
+    │   ├─ modules/          # Domain-driven modules (model, repo, service, resolver)
+    │   ├─ schema.js         # MergeTypes + makeExecutableSchema
+    │   └─ server.js         # Express/Lambda handler
+    └─ tests/                # Unit + integration (Jest + Supertest)
 ````
 
+> A pasta `.github/workflows` contém o pipeline de CI; `.vscode/` traz *launch configs* e *settings* de formatação/ESLint.
+
 ---
 
-## Variáveis de ambiente
+## ⚙️ Variáveis de ambiente
 
-### `frontend/.env`
+| Arquivo           | Chave                                             | Exemplo                                   |
+| ----------------- | ------------------------------------------------- | ----------------------------------------- |
+| `frontend/.env`   | `REACT_APP_GRAPHQL_URI`                           | `http://localhost:4000/graphql`           |
+| `serverless/.env` | `DB_HOST` `DB_PORT` `DB_NAME` `DB_USER` `DB_PASS` | `localhost` `5432` `tododb` `todo` `todo` |
+| `serverless/.env` | `PORT` **(opcional)**                             | `4000`                                    |
 
-```env
-REACT_APP_GRAPHQL_URI=http://localhost:4000/graphql
-```
-
-### `serverless/.env`
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=tododb
-DB_USER=todo
-DB_PASS=todo
-PORT=4000          # opcional (padrão 4000)
-```
 ---
 
-## Executando localmente
+## 🏃‍♂️ Como rodar (dev)
 
-### 1. Executando com Docker Compose (somente Postgres)
+### 1. Subir Postgres com Docker Compose
 
 ```bash
 cd serverless
-
-docker-compose up -d   # inicia o serviço 'db'
-# ... rode backend e frontend normalmente em terminais separados ...
-docker-compose down    # encerra o container
+docker compose up -d          # inicia banco em 5432
 ```
 
----
-
-### 2. Backend (npm)
+### 2. Backend
 
 ```bash
 cd serverless
 npm install
-npm start            # http://localhost:4000/graphql
+npm start                     # http://localhost:4000/graphql
 ```
 
-### 3. Frontend (Yarn)
+### 3. Frontend
 
 ```bash
 cd frontend
 yarn
-yarn start           # http://localhost:3000
+yarn start                    # http://localhost:3000
 ```
 
-### 4. Rodando migrations e seeders (Sequelize CLI)
+### 4. Migrations & seeders
 
 ```bash
 cd serverless
-
-npx sequelize-cli db:migrate     # cria as tabelas
-
-npx sequelize-cli db:seed:all    # popula tabelas com dados iniciais
+npx sequelize-cli db:migrate
+npx sequelize-cli db:seed:all
 ```
 
 ---
 
-## Funcionalidades atuais
+## 🧪 Testes
 
-* **Criar e listar tarefas** – inclusão de novos cards e exibição em tempo real.
-* **Drag & drop de cards** – reorganize tarefas entre lanes usando `@hello-pangea/dnd`; a nova ordem é persistida no banco.
-* **CRUD** – edição, exclusão, filtros e validações (duplicidade ou campos vazios). A regra de negócio reside no **service**; a persistência, no **repository** via Sequelize.
-* **Notificações** – feedback imediato ao usuário com Toastify.
-* **Ordenação de lanes** – é possível reordenar colunas e gravar a nova sequência no Postgres através do campo **position**.
-* **Conclusão de tarefas** – um card é marcado como concluído automaticamente ao entrar em uma lane cujo atributo **is\_done** seja `true`.
-* **Dark Mode** – Alternância de tema claro e escuro.
+```bash
+# unit + integration (coverage)
+cd serverless
+npm test -- --watch             # ou `npm run test:ci`
+```
 
 ---
 
-## Scripts úteis
+## 📦 Scripts úteis
 
-| Diretório  | Script       | Descrição                |
-| ---------- | ------------ | ------------------------ |
-| serverless | `npm start`  | Apollo Server (prod/dev) |
-| serverless | `npm test`   | Jest + cobertura         |
-| frontend   | `yarn start` | CRA com HMR              |
-
----
-
-## Próximos passos
-
-* **Converter para PWA**
-* **Perfil administrador**
-
-  * Autenticação (JWT): `admin` pode alterar o campo **position** das lanes direto no board.
-  * Telas de gestão em `/admin/lanes` com drag & drop e validação de limites.
-
-* **Sincronização em tempo real**
-
-  * Implementar **WebSockets / GraphQL Subscriptions** para que várias sessões compartilhem o mesmo board sem conflitos.
-  * Estratégia de merge otimista + broadcasts: quando um usuário move um card, todos os clientes recebem o evento e atualizam a UI imediatamente.
-  * Em caso de colisão, aplicar *last-write-wins* ou fila de operações com versão do documento.
-
-* **Deploy em nuvem**
-
-  * **Backend**: empacotar o serviço GraphQL em Lambda + API Gateway (WebSocket API para subs) via AWS SAM ou Serverless Framework.
-  * **Frontend**: hospedar no S3 + CloudFront (ou Amplify). Integração contínua com GitHub Actions.
-
-* **Banco de dados gerenciado**
-
-  * Migrar o Postgres local para AWS RDS (Free Tier ou Aurora Serverless v2) e apontar `DB_HOST`, `DB_USER`, `DB_PASS` nos Lambdas.
-
-* **Testes E2E com Cypress**
-
-  * Criar suíte de smoke-tests (criar tarefa, mover card, concluir tarefa).
-  * Executar na pipeline CI e gerar relatórios com screenshots para falhas.
-
-
----
+| Diretório           | Comando      | Descrição                                  |
+| ------------------- | ------------ | ------------------------------------------ |
+| serverless          | `npm start`  | Inicia Apollo Server (hot-reload em dev)   |
+| serverless          | `npm test`   | Jest + cobertura                           |
+| frontend            | `yarn start` | CRA com HMR                                |
