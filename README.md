@@ -56,6 +56,13 @@ Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*, desenvo
 * **Docker Compose** apenas para Postgres, mas pronto para extensão full-stack.
 * **Migrations + seeders** gerando dados demo (inclui níveis de prioridade com cores).
 
+### Roadmap já iniciado
+- Perfil **admin** com autenticação JWT (reordenação de lanes diretamente do board)
+- **WebSockets / GraphQL Subscriptions** para sincronização em tempo real
+- Deploy serverless (AWS SAM ou Serverless Framework) + S3/CloudFront
+- Migração do Postgres local para **RDS/Aurora Serverless v2**
+- **E2E Cypress** (smoke tests + screenshots na CI)
+
 ---
 
 ## 🗂️ Estrutura de pastas
