@@ -70,7 +70,7 @@ Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*.
 ## 🗂️ Estrutura de pastas
 
 ```text
-uno/
+root/
 ├─ frontend/                 # React (Create-React-App)
 │  ├─ public/
 │  └─ src/
