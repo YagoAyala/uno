@@ -1,6 +1,6 @@
-# UNO Challenge · Lista de Tarefas 🗒️
+# Lista de Tarefas 🗒️
 
-Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*, desenvolvida como desafio técnico da **UNO**.
+Aplicação full-stack para gerenciamento de tarefas em estilo *kanban*.
 
 [demo-video.webm](https://github.com/user-attachments/assets/f71e0c0e-a767-404f-a360-ca233e88cd5b)
 
